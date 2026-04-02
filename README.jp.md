@@ -35,7 +35,8 @@ Power Platform 環境から Enterprise Policy のリンクを解除します。
    Disable-SubnetInjection -EnvironmentId "<環境ID>"
    ```
 
-3. 環境 ID は [Power Platform 管理センター](https://admin.powerplatform.microsoft.com/) > **環境** > 対象環境の詳細画面で確認できる
+3. 環境 ID は [Power Platform 管理センター](https://admin.powerplatform.microsoft.com/) > **環境** > 対象環境の詳細画面で確認できる<img width="1289" height="536" alt="image" src="https://github.com/user-attachments/assets/7352b694-c418-4353-8f68-52b01e132188" />
+
 
 > **注意**: 無効化の反映には数分かかる場合があります。操作完了後、Power Platform 管理センター > 対象環境 > **履歴** で状態が「成功」になっていることを確認してください。
 
