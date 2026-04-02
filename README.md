@@ -37,9 +37,11 @@ Unlink the Enterprise Policy from the Power Platform environment.
    Disable-SubnetInjection -EnvironmentId "<EnvironmentId>"
    ```
 
+Execution example:<img width="2851" height="1186" alt="image" src="https://github.com/user-attachments/assets/b54337e1-639d-470d-9f84-cefb67f46e48" />
+
 > **Note**: This command fails on PowerShell 5.x. Install and run on PowerShell 7.
 
-3. You can find the Environment ID in the [Power Platform admin center](https://admin.powerplatform.microsoft.com/) > **Environments** > select the target environment > details page
+3. You can find the Environment ID in the [Power Platform admin center](https://admin.powerplatform.microsoft.com/) > **Environments** > select the target environment > details page<img width="1289" height="536" alt="image" src="https://github.com/user-attachments/assets/7352b694-c418-4353-8f68-52b01e132188" />
 
 > **Note**: It may take a few minutes for the change to take effect. After completion, verify the status shows "Succeeded" in the Power Platform admin center > target environment > **History**.
 
@@ -57,7 +59,7 @@ Identify the target Enterprise Policy using Azure Resource Graph Explorer, then 
    | project name, kind, resourceGroup, location, subscriptionId, id, properties
    ```
 
-4. Click **Run query**
+4. Click **Run query** <img width="1891" height="676" alt="image" src="https://github.com/user-attachments/assets/4344d181-9598-46d2-8e35-252eec0ecbeb" />
 5. Identify the target Enterprise Policy from the results
    - The `id` column is the `PolicyResourceId` (used in the deletion command)
    - Entries with `kind` of `NetworkInjection` are subnet injection Enterprise Policies
