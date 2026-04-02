@@ -43,7 +43,7 @@ Power Platform 環境から Enterprise Policy のリンクを解除します。
 
 > **注意**: 無効化の反映には数分かかる場合があります。操作完了後、Power Platform 管理センター > 対象環境 > **履歴** で状態が「成功」になっていることを確認してください。
 
-### 手順 2: Enterprise Policy を確認する
+### 手順 2: Enterprise Policy を削除する
 
 削除対象の Enterprise Policy を Azure Resource Graph エクスプローラーで確認します。
 
