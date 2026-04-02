@@ -35,13 +35,15 @@ Unlink the Enterprise Policy from the Power Platform environment.
    Disable-SubnetInjection -EnvironmentId "<EnvironmentId>"
    ```
 
+> **Note**: This command fails on PowerShell 5.x. Install and run on PowerShell 7.
+
 3. You can find the Environment ID in the [Power Platform admin center](https://admin.powerplatform.microsoft.com/) > **Environments** > select the target environment > details page
 
 > **Note**: It may take a few minutes for the change to take effect. After completion, verify the status shows "Succeeded" in the Power Platform admin center > target environment > **History**.
 
-### Step 2: Verify the Enterprise Policy
+### Step 2: Verify and Delete the Enterprise Policy
 
-Identify the target Enterprise Policy using Azure Resource Graph Explorer.
+Identify the target Enterprise Policy using Azure Resource Graph Explorer, then delete it via PowerShell.
 
 1. Sign in to the [Azure portal](https://portal.azure.com/)
 2. Type **Resource Graph Explorer** in the search bar at the top and select it
@@ -55,7 +57,7 @@ Identify the target Enterprise Policy using Azure Resource Graph Explorer.
 
 4. Click **Run query**
 5. Identify the target Enterprise Policy from the results
-   - The `id` column is the `PolicyResourceId` (used in Step 3 for deletion)
+   - The `id` column is the `PolicyResourceId` (used in the deletion command)
    - Entries with `kind` of `NetworkInjection` are subnet injection Enterprise Policies
 
 > **Tip**: To filter by a specific subscription or resource group, add `where` clauses:
@@ -68,25 +70,15 @@ Identify the target Enterprise Policy using Azure Resource Graph Explorer.
 > | project name, kind, resourceGroup, location, id, properties
 > ```
 
-### Step 3: Delete the Enterprise Policy
-
-Delete the Enterprise Policy resource from Azure by using PowerShell.
-
-1. List the policies in the target resource group
-
-   ```powershell
-   Get-SubnetInjectionEnterprisePolicy -SubscriptionId "<SubscriptionId>" -ResourceGroupName "<ResourceGroupName>"
-   ```
-
-2. Delete the target policy by specifying its `PolicyResourceId`
+6. Delete the target policy by specifying the `PolicyResourceId` in PowerShell
 
    ```powershell
    Remove-SubnetInjectionEnterprisePolicy -PolicyResourceId "/subscriptions/<subscriptionId>/resourceGroups/<resourceGroupName>/providers/Microsoft.PowerPlatform/enterprisePolicies/<policyName>"
    ```
 
-3. Run `Get-SubnetInjectionEnterprisePolicy` again and confirm the target policy is no longer listed
+7. Re-run the same KQL query in Resource Graph Explorer and confirm the target policy is no longer listed
 
-### Step 4: Remove the Subnet Delegation
+### Step 3: Remove the Subnet Delegation
 
 Remove the `Microsoft.PowerPlatform/enterprisePolicies` delegation from the subnet.
 
@@ -98,14 +90,14 @@ Remove the `Microsoft.PowerPlatform/enterprisePolicies` delegation from the subn
 6. Select **None** from the **Subnet delegation** dropdown
 7. Click **Save**
 
-### Step 5: Delete the Subnet
+### Step 4: Delete the Subnet
 
-1. Open the **Subnets** page of the same virtual network from Step 4
+1. Open the **Subnets** page of the same virtual network from Step 3
 2. Right-click the subnet row to delete, or click the **...** menu
 3. Select **Delete**
 4. Click **Yes** in the confirmation dialog
 
-### Step 6: Delete the Virtual Network
+### Step 5: Delete the Virtual Network
 
 1. Sign in to the [Azure portal](https://portal.azure.com/)
 2. Type **Virtual networks** in the search bar at the top and select **Virtual networks**
