@@ -23,7 +23,8 @@ Power Platform 環境から Enterprise Policy のリンクを解除します。
 1. [Power Platform 管理センター](https://admin.powerplatform.microsoft.com/) にサインインする
 2. 左メニューから **環境** を選択する
 3. 対象の環境を選択する
-4. **設定** > **製品** > **プライバシー + セキュリティ** を開く
+4. **設定** > **製品** > **プライバシー + セキュリティ** を開く<img width="1442" height="144" alt="image" src="https://github.com/user-attachments/assets/dde7af16-6604-490e-9c93-66bc7656f3bf" />
+
 5. **仮想ネットワーク** セクションで、リンクされている Enterprise Policy を確認する
 6. **無効化** または **リンク解除** を選択する
 7. 確認ダイアログで **確認** をクリックする
