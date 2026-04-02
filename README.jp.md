@@ -31,9 +31,12 @@ Power Platform 環境から Enterprise Policy のリンクを解除します。
 
 2. 以下のコマンドを実行し、サブネットインジェクションを無効化する
 
+
    ```powershell
    Disable-SubnetInjection -EnvironmentId "<環境ID>"
    ```
+実行例<img width="2851" height="1186" alt="image" src="https://github.com/user-attachments/assets/b54337e1-639d-470d-9f84-cefb67f46e48" />
+> **注意**: Powershell 5系ではコマンドが失敗します。Powershell 7をインストールして実行します。
 
 3. 環境 ID は [Power Platform 管理センター](https://admin.powerplatform.microsoft.com/) > **環境** > 対象環境の詳細画面で確認できる<img width="1289" height="536" alt="image" src="https://github.com/user-attachments/assets/7352b694-c418-4353-8f68-52b01e132188" />
 
