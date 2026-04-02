@@ -43,7 +43,36 @@ Power Platform 環境から Enterprise Policy のリンクを解除します。
 
 > **注意**: 無効化の反映には数分かかる場合があります。操作完了後、Power Platform 管理センター > 対象環境 > **履歴** で状態が「成功」になっていることを確認してください。
 
-### 手順 2: Enterprise Policy を削除する
+### 手順 2: Enterprise Policy を確認する
+
+削除対象の Enterprise Policy を Azure Resource Graph エクスプローラーで確認します。
+
+1. [Azure ポータル](https://portal.azure.com/) にサインインする
+2. 上部の検索バーに **Resource Graph エクスプローラー** と入力し、選択する
+3. クエリエディターに以下の KQL クエリを入力する
+
+   ```kql
+   resources
+   | where type == "microsoft.powerplatform/enterprisepolicies"
+   | project name, kind, resourceGroup, location, subscriptionId, id, properties
+   ```
+
+4. **クエリの実行** をクリックする
+5. 結果の一覧から削除対象の Enterprise Policy を確認する
+   - `id` 列が `PolicyArmId`（手順 3 の削除で使用する値）です
+   - `kind` が `NetworkInjection` のものがサブネットインジェクション用の Enterprise Policy です
+
+> **補足**: 特定のサブスクリプションやリソースグループに絞りたい場合は、以下のように `where` 句を追加してください。
+>
+> ```kql
+> resources
+> | where type == "microsoft.powerplatform/enterprisepolicies"
+> | where subscriptionId == "<サブスクリプションID>"
+> | where resourceGroup == "<リソースグループ名>"
+> | project name, kind, resourceGroup, location, id, properties
+> ```
+
+### 手順 3: Enterprise Policy を削除する
 
 Azure から Enterprise Policy リソースを PowerShell で削除します。
 
@@ -61,7 +90,7 @@ Azure から Enterprise Policy リソースを PowerShell で削除します。
 
 3. 削除後に同じ `Get-SubnetInjectionEnterprisePolicy` コマンドを実行し、対象ポリシーが表示されないことを確認する
 
-### 手順 3: サブネット委任を解除する
+### 手順 4: サブネット委任を解除する
 
 サブネットから `Microsoft.PowerPlatform/enterprisePolicies` の委任を解除します。
 
@@ -73,14 +102,14 @@ Azure から Enterprise Policy リソースを PowerShell で削除します。
 6. **サブネットの委任** ドロップダウンから **None** を選択する
 7. **保存** をクリックする
 
-### 手順 4: サブネットを削除する
+### 手順 5: サブネットを削除する
 
-1. 手順 3 と同じ仮想ネットワークの **サブネット** 画面を開く
+1. 手順 4 と同じ仮想ネットワークの **サブネット** 画面を開く
 2. 削除するサブネットの行を右クリック、または **...** メニューをクリックする
 3. **削除** を選択する
 4. 確認ダイアログで **はい** をクリックする
 
-### 手順 5: 仮想ネットワークを削除する
+### 手順 6: 仮想ネットワークを削除する
 
 1. [Azure ポータル](https://portal.azure.com/) にサインインする
 2. 上部の検索バーに **仮想ネットワーク** と入力し、**仮想ネットワーク** を選択する
