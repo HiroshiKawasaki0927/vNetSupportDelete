@@ -20,15 +20,24 @@ Failed to delete virtual network '<vnetName>'. Error: Subnet default is in use b
 
 Unlink the Enterprise Policy from the Power Platform environment.
 
-1. Sign in to the [Power Platform admin center](https://admin.powerplatform.microsoft.com/)
-2. Select **Environments** from the left menu
-3. Select the target environment
-4. Navigate to **Settings** > **Product** > **Privacy + Security**
-5. In the **Virtual Network** section, verify the linked Enterprise Policy
-6. Select **Disable** or **Unlink**
-7. Click **Confirm** in the confirmation dialog
+> **Note**: This step cannot be performed through the GUI. According to the official documentation, removing an Enterprise Policy from an environment is only possible through PowerShell.
 
-> **Note**: It may take a few minutes for the change to take effect.
+1. Open PowerShell and install/import the module
+
+   ```powershell
+   Install-Module -Name Microsoft.PowerPlatform.EnterprisePolicies
+   Import-Module Microsoft.PowerPlatform.EnterprisePolicies
+   ```
+
+2. Run the following command to disable subnet injection
+
+   ```powershell
+   Disable-SubnetInjection -EnvironmentId "<EnvironmentId>"
+   ```
+
+3. You can find the Environment ID in the [Power Platform admin center](https://admin.powerplatform.microsoft.com/) > **Environments** > select the target environment > details page
+
+> **Note**: It may take a few minutes for the change to take effect. After completion, verify the status shows "Succeeded" in the Power Platform admin center > target environment > **History**.
 
 ### Step 2: Delete the Enterprise Policy
 
