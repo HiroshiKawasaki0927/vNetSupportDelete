@@ -55,7 +55,8 @@ Power Platform 環境から Enterprise Policy のリンクを解除します。
    resources
    | where type == "microsoft.powerplatform/enterprisepolicies"
    | project name, kind, resourceGroup, location, subscriptionId, id, properties
-   ```
+   ```<img width="1891" height="676" alt="image" src="https://github.com/user-attachments/assets/4344d181-9598-46d2-8e35-252eec0ecbeb" />
+
 
 4. **クエリの実行** をクリックする
 5. 結果の一覧から削除対象の Enterprise Policy を確認する
