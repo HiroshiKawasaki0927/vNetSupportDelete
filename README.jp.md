@@ -59,7 +59,7 @@ Power Platform 環境から Enterprise Policy のリンクを解除します。
    
 4. **クエリの実行** をクリックする <img width="1891" height="676" alt="image" src="https://github.com/user-attachments/assets/4344d181-9598-46d2-8e35-252eec0ecbeb" />
 5. 結果の一覧から削除対象の Enterprise Policy を確認する
-   - `id` 列が `PolicyArmId`（手順 3 の削除で使用する値）です
+   - `id` 列が `PolicyResourceId`（手順 3 の削除で使用する値）です
    - `kind` が `NetworkInjection` のものがサブネットインジェクション用の Enterprise Policy です
 
 > **補足**: 特定のサブスクリプションやリソースグループに絞りたい場合は、以下のように `where` 句を追加してください。
@@ -82,10 +82,10 @@ Azure から Enterprise Policy リソースを PowerShell で削除します。
    Get-SubnetInjectionEnterprisePolicy -SubscriptionId "<サブスクリプションID>" -ResourceGroupName "<リソースグループ名>"
    ```
 
-2. 削除対象の `PolicyArmId` を指定して削除する
+2. 削除対象の `PolicyResourceId` を指定して削除する
 
    ```powershell
-   Remove-SubnetInjectionEnterprisePolicy -PolicyArmId "/subscriptions/<subscriptionId>/resourceGroups/<resourceGroupName>/providers/Microsoft.PowerPlatform/enterprisePolicies/<policyName>"
+   Remove-SubnetInjectionEnterprisePolicy -PolicyResourceId "/subscriptions/<subscriptionId>/resourceGroups/<resourceGroupName>/providers/Microsoft.PowerPlatform/enterprisePolicies/<policyName>"
    ```
 
 3. 削除後に同じ `Get-SubnetInjectionEnterprisePolicy` コマンドを実行し、対象ポリシーが表示されないことを確認する
@@ -124,7 +124,7 @@ Azure から Enterprise Policy リソースを PowerShell で削除します。
 | 項目 | 説明 | 確認方法 |
 |---|---|---|
 | 環境 ID | Power Platform 環境 ID | Power Platform 管理センター > 環境 > 対象環境の詳細 |
-| PolicyArmId | Enterprise Policy の ARM リソース ID | `Get-SubnetInjectionEnterprisePolicy` の出力、または Azure ポータル > リソースの JSON ビュー |
+| PolicyResourceId | Enterprise Policy の ARM リソース ID | `Get-SubnetInjectionEnterprisePolicy` の出力、Azure Resource Graph エクスプローラーの `id` 列、または Azure ポータル > リソースの JSON ビュー |
 | サブスクリプション ID | Azure サブスクリプション ID | Azure ポータル > サブスクリプション |
 | リソースグループ名 | Azure リソースグループ名 | Azure ポータル > リソースグループ |
 | 仮想ネットワーク名 | 仮想ネットワーク名 | Azure ポータル > 仮想ネットワーク |
