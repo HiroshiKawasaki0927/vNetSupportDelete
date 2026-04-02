@@ -1,6 +1,10 @@
-﻿# vNetSupportDelete
+﻿# 仮想ネットワークサポートの削除方法
 
-Power Platform 連携用に作成した仮想ネットワークサポートを削除する手順です。
+Power Platform 連携で利用する仮想ネットワークサポートですが、Azure portalから直接削除しようとすると以下のエラーが発生します。
+
+```error
+仮想ネットワーク '<vnetName>' を削除できませんでした。エラー: サブネット default は、/subscriptions/<subscriptionId>/resourceGroups/<resourceGroups/Name>/providers/Microsoft.Network/virtualNetworks/<vnetName>/subnets/default/serviceAssociationLinks/PowerPlatformServiceLink で使用中のため、削除できません。サブネットを削除するには、サブネット内のすべてのリソースを削除します。aka.ms/deletesubnet を参照してください。
+```
 
 ## 前提条件
 
