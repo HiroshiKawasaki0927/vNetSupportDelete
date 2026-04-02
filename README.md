@@ -1,5 +1,7 @@
 ﻿# How to Delete Virtual Network Support
 
+[日本語版 (README.jp.md)](README.jp.md)
+
 When attempting to delete a Virtual Network used for Power Platform integration directly from the Azure portal, you may encounter the following error:
 
 ```error
