@@ -1,79 +1,85 @@
-﻿# vNetSupportDelete
+﻿# How to Delete Virtual Network Support
 
-Steps to delete Virtual Network support created for Power Platform integration.
+When attempting to delete a Virtual Network used for Power Platform integration directly from the Azure portal, you may encounter the following error:
+
+```error
+Failed to delete virtual network '<vnetName>'. Error: Subnet default is in use by /subscriptions/<subscriptionId>/resourceGroups/<resourceGroupName>/providers/Microsoft.Network/virtualNetworks/<vnetName>/subnets/default/serviceAssociationLinks/PowerPlatformServiceLink and cannot be deleted. To delete the subnet, delete all resources within the subnet. See aka.ms/deletesubnet.
+```
 
 ## Prerequisites
 
-- PowerShell with the Microsoft.PowerPlatform.EnterprisePolicies module installed
-- Azure subscription with Network Contributor role (or equivalent)
-- Power Platform Administrator role in Microsoft Entra admin center
-
-```powershell
-Install-Module -Name Microsoft.PowerPlatform.EnterprisePolicies
-Import-Module Microsoft.PowerPlatform.EnterprisePolicies
-```
+- Access to the Azure portal with the Network Contributor role (or equivalent)
+- Access to the Power Platform admin center with the Power Platform Administrator role
+- Access to the Microsoft Entra admin center
 
 ## Deletion Procedure
 
-> **Important**: Resources must be deleted in the following order. Attempting to delete the Virtual Network before removing the Enterprise Policy will result in an InUseSubnetCannotBeDeleted error.
+> **Important**: Resources must be deleted in the following order. Attempting to delete the Virtual Network before removing the Enterprise Policy will result in an `InUseSubnetCannotBeDeleted` error.
 
 ### Step 1: Disable Subnet Injection from the Power Platform Environment
 
 Unlink the Enterprise Policy from the Power Platform environment.
 
-```powershell
-Disable-SubnetInjection `
-  -EnvironmentId "00000000-0000-0000-0000-000000000000" `
-  -PolicyArmId "/subscriptions/<subscriptionId>/resourceGroups/<resourceGroup>/providers/Microsoft.PowerPlatform/enterprisePolicies/<policyName>"
-```
+1. Sign in to the [Power Platform admin center](https://admin.powerplatform.microsoft.com/)
+2. Select **Environments** from the left menu
+3. Select the target environment
+4. Navigate to **Settings** > **Product** > **Privacy + Security**
+5. In the **Virtual Network** section, verify the linked Enterprise Policy
+6. Select **Disable** or **Unlink**
+7. Click **Confirm** in the confirmation dialog
+
+> **Note**: It may take a few minutes for the change to take effect.
 
 ### Step 2: Delete the Enterprise Policy
 
-Remove the Subnet Injection Enterprise Policy from Azure.
+Delete the Enterprise Policy resource from Azure.
 
-```powershell
-Remove-SubnetInjectionEnterprisePolicy `
-  -PolicyArmId "/subscriptions/<subscriptionId>/resourceGroups/<resourceGroup>/providers/Microsoft.PowerPlatform/enterprisePolicies/<policyName>"
-```
+1. Sign in to the [Azure portal](https://portal.azure.com/)
+2. Type **Enterprise Policies** in the search bar at the top and search
+   - Alternatively, navigate to **Resource groups** > select the target resource group > select the Enterprise Policy resource
+3. Click the Enterprise Policy resource to delete
+4. Click **Delete** in the top menu
+5. Enter the resource name in the confirmation dialog and click **Delete**
 
 ### Step 3: Remove the Subnet Delegation
 
-Remove the Microsoft.PowerPlatform/enterprisePolicies delegation from the subnet.
+Remove the `Microsoft.PowerPlatform/enterprisePolicies` delegation from the subnet.
 
-```powershell
-# Get the current subnet configuration
-$vnet = Get-AzVirtualNetwork -Name "<vnetName>" -ResourceGroupName "<resourceGroup>"
-$subnet = Get-AzVirtualNetworkSubnetConfig -Name "<subnetName>" -VirtualNetwork $vnet
-
-# Remove the delegation
-$subnet.Delegations = @()
-Set-AzVirtualNetwork -VirtualNetwork $vnet
-```
+1. Sign in to the [Azure portal](https://portal.azure.com/)
+2. Type **Virtual networks** in the search bar at the top and select **Virtual networks**
+3. Click the target virtual network
+4. Select **Subnets** from the left menu
+5. Click the delegated subnet
+6. Select **None** from the **Subnet delegation** dropdown
+7. Click **Save**
 
 ### Step 4: Delete the Subnet
 
-```powershell
-$vnet = Get-AzVirtualNetwork -Name "<vnetName>" -ResourceGroupName "<resourceGroup>"
-Remove-AzVirtualNetworkSubnetConfig -Name "<subnetName>" -VirtualNetwork $vnet
-Set-AzVirtualNetwork -VirtualNetwork $vnet
-```
+1. Open the **Subnets** page of the same virtual network from Step 3
+2. Right-click the subnet row to delete, or click the **...** menu
+3. Select **Delete**
+4. Click **Yes** in the confirmation dialog
 
 ### Step 5: Delete the Virtual Network
 
-```powershell
-Remove-AzVirtualNetwork -Name "<vnetName>" -ResourceGroupName "<resourceGroup>" -Force
-```
+1. Sign in to the [Azure portal](https://portal.azure.com/)
+2. Type **Virtual networks** in the search bar at the top and select **Virtual networks**
+3. Check the box next to the virtual network to delete
+4. Click **Delete** in the top menu
+5. Click **Delete** in the confirmation dialog
 
-## Parameters
+> **Note**: If other subnets or resources remain in the virtual network, delete them first.
 
-| Parameter | Description |
-|---|---|
-| EnvironmentId | Power Platform environment ID |
-| PolicyArmId | ARM resource ID of the Enterprise Policy |
-| subscriptionId | Azure subscription ID |
-| esourceGroup | Azure resource group name |
-| netName | Virtual Network name |
-| subnetName | Subnet name delegated to Power Platform |
+## Required Information
+
+| Item | Description | Where to Find |
+|---|---|---|
+| Environment ID | Power Platform environment ID | Power Platform admin center > Environments > Target environment details |
+| Enterprise Policy Name | Azure resource name of the Enterprise Policy | Azure portal > Resource groups > Target resource |
+| Subscription ID | Azure subscription ID | Azure portal > Subscriptions |
+| Resource Group Name | Azure resource group name | Azure portal > Resource groups |
+| Virtual Network Name | Virtual network name | Azure portal > Virtual networks |
+| Subnet Name | Subnet name delegated to Power Platform | Azure portal > Virtual networks > Subnets |
 
 ## References
 
