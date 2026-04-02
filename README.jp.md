@@ -45,14 +45,21 @@ Power Platform 環境から Enterprise Policy のリンクを解除します。
 
 ### 手順 2: Enterprise Policy を削除する
 
-Azure から Enterprise Policy リソースを削除します。
+Azure から Enterprise Policy リソースを PowerShell で削除します。
 
-1. [Azure ポータル](https://portal.azure.com/) にサインインする
-2. 上部の検索バーに **Enterprise Policies** と入力し、検索する
-   - または、**リソースグループ** > 対象のリソースグループ > Enterprise Policy リソースを選択する
-3. 削除する Enterprise Policy リソースをクリックする
-4. 上部メニューの **削除** をクリックする
-5. 確認ダイアログでリソース名を入力し、**削除** をクリックする
+1. PowerShell で対象ポリシーを確認する
+
+   ```powershell
+   Get-SubnetInjectionEnterprisePolicy -SubscriptionId "<サブスクリプションID>" -ResourceGroupName "<リソースグループ名>"
+   ```
+
+2. 削除対象の `PolicyArmId` を指定して削除する
+
+   ```powershell
+   Remove-SubnetInjectionEnterprisePolicy -PolicyArmId "/subscriptions/<subscriptionId>/resourceGroups/<resourceGroupName>/providers/Microsoft.PowerPlatform/enterprisePolicies/<policyName>"
+   ```
+
+3. 削除後に同じ `Get-SubnetInjectionEnterprisePolicy` コマンドを実行し、対象ポリシーが表示されないことを確認する
 
 ### 手順 3: サブネット委任を解除する
 
@@ -88,7 +95,7 @@ Azure から Enterprise Policy リソースを削除します。
 | 項目 | 説明 | 確認方法 |
 |---|---|---|
 | 環境 ID | Power Platform 環境 ID | Power Platform 管理センター > 環境 > 対象環境の詳細 |
-| Enterprise Policy 名 | Enterprise Policy の Azure リソース名 | Azure ポータル > リソースグループ > 該当リソース |
+| PolicyArmId | Enterprise Policy の ARM リソース ID | `Get-SubnetInjectionEnterprisePolicy` の出力、または Azure ポータル > リソースの JSON ビュー |
 | サブスクリプション ID | Azure サブスクリプション ID | Azure ポータル > サブスクリプション |
 | リソースグループ名 | Azure リソースグループ名 | Azure ポータル > リソースグループ |
 | 仮想ネットワーク名 | 仮想ネットワーク名 | Azure ポータル > 仮想ネットワーク |

@@ -41,14 +41,21 @@ Unlink the Enterprise Policy from the Power Platform environment.
 
 ### Step 2: Delete the Enterprise Policy
 
-Delete the Enterprise Policy resource from Azure.
+Delete the Enterprise Policy resource from Azure by using PowerShell.
 
-1. Sign in to the [Azure portal](https://portal.azure.com/)
-2. Type **Enterprise Policies** in the search bar at the top and search
-   - Alternatively, navigate to **Resource groups** > select the target resource group > select the Enterprise Policy resource
-3. Click the Enterprise Policy resource to delete
-4. Click **Delete** in the top menu
-5. Enter the resource name in the confirmation dialog and click **Delete**
+1. List the policies in the target resource group
+
+   ```powershell
+   Get-SubnetInjectionEnterprisePolicy -SubscriptionId "<SubscriptionId>" -ResourceGroupName "<ResourceGroupName>"
+   ```
+
+2. Delete the target policy by using its `PolicyArmId`
+
+   ```powershell
+   Remove-SubnetInjectionEnterprisePolicy -PolicyArmId "/subscriptions/<subscriptionId>/resourceGroups/<resourceGroupName>/providers/Microsoft.PowerPlatform/enterprisePolicies/<policyName>"
+   ```
+
+3. Run `Get-SubnetInjectionEnterprisePolicy` again and confirm the target policy is no longer listed
 
 ### Step 3: Remove the Subnet Delegation
 
@@ -84,7 +91,7 @@ Remove the `Microsoft.PowerPlatform/enterprisePolicies` delegation from the subn
 | Item | Description | Where to Find |
 |---|---|---|
 | Environment ID | Power Platform environment ID | Power Platform admin center > Environments > Target environment details |
-| Enterprise Policy Name | Azure resource name of the Enterprise Policy | Azure portal > Resource groups > Target resource |
+| PolicyArmId | ARM resource ID of the Enterprise Policy | Output of `Get-SubnetInjectionEnterprisePolicy`, or Azure portal > resource JSON view |
 | Subscription ID | Azure subscription ID | Azure portal > Subscriptions |
 | Resource Group Name | Azure resource group name | Azure portal > Resource groups |
 | Virtual Network Name | Virtual network name | Azure portal > Virtual networks |
